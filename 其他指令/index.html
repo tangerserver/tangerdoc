@@ -45,7 +45,7 @@ a{color:inherit;text-decoration:none;}
 
 /* ── main ── */
 .main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column;}
-.content{flex:1;padding:52px 72px 40px;max-width:860px;}
+.content{flex:1;padding:72px 72px 40px;max-width:860px;}
 
 /* ── page header ── */
 .page-header{margin-bottom:40px;}
@@ -159,6 +159,26 @@ a{color:inherit;text-decoration:none;}
 .cat-card .cc-meta{margin-top:12px;display:flex;align-items:center;justify-content:space-between;}
 .cat-card .cc-count{font-size:11px;color:var(--accent2);font-weight:600;}
 .cat-card .cc-arrow{font-size:14px;color:var(--muted);}
+
+/* ── topbar ── */
+.topbar{
+  position:fixed;top:0;left:var(--sidebar);right:0;height:52px;
+  background:rgba(15,15,15,.85);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:0 28px;gap:10px;z-index:99;
+}
+.topbar-btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:7px 14px;border-radius:8px;font-size:12.5px;font-weight:600;
+  text-decoration:none;transition:all .15s;cursor:pointer;border:none;
+}
+.topbar-btn.invite{background:#5865F2;color:#fff;}
+.topbar-btn.invite:hover{background:#4752c4;}
+.topbar-btn.site{background:rgba(255,255,255,.06);color:var(--text2);border:1px solid var(--border2);}
+.topbar-btn.site:hover{background:rgba(255,255,255,.1);color:var(--text);}
+#invite-modal{display:none;position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);align-items:center;justify-content:center;}
+#invite-modal.open{display:flex;}
 </style>
 </head>
 <body>
@@ -174,8 +194,43 @@ a{color:inherit;text-decoration:none;}
   <a href="../" class="sidebar-item"><span class="si-icon">🏠</span>首頁</a>
   <div class="sidebar-section">指令系統</div>
   <a href="../管理系統/" class="sidebar-item"><span class="si-icon">🛠️</span>管理系統</a><a href="../警告系統/" class="sidebar-item"><span class="si-icon">⚠️</span>警告系統</a><a href="../防護系統/" class="sidebar-item"><span class="si-icon">🛡️</span>防護系統</a><a href="../匿名系統/" class="sidebar-item"><span class="si-icon">🎭</span>匿名系統</a><a href="../趣味系統/" class="sidebar-item"><span class="si-icon">🎮</span>趣味系統</a><a href="../廣播系統/" class="sidebar-item"><span class="si-icon">📢</span>廣播系統<span class="si-badge">💎</span></a><a href="../音樂系統/" class="sidebar-item"><span class="si-icon">🎵</span>音樂系統</a><a href="../備份系統/" class="sidebar-item"><span class="si-icon">💾</span>備份系統<span class="si-badge">💎</span></a><a href="../通知系統/" class="sidebar-item"><span class="si-icon">🔔</span>通知系統</a><a href="../人員系統/" class="sidebar-item"><span class="si-icon">👥</span>人員系統</a><a href="../人員計數器系統/" class="sidebar-item"><span class="si-icon">🔢</span>人員計數器系統</a><a href="../抽獎系統/" class="sidebar-item"><span class="si-icon">🎁</span>抽獎系統</a><a href="../其他指令/" class="sidebar-item active"><span class="si-icon">📌</span>其他指令</a>
-  <div class="sidebar-footer">TANGER BOT © 2025</div>
+  <div class="sidebar-footer">
+    <div style="display:flex;justify-content:center;gap:12px;font-size:11px;margin-bottom:8px;">
+      <a href="https://tanger-tos.netlify.app/" target="_blank" style="color:#555;text-decoration:none;" onmouseover="this.style.color='#888'" onmouseout="this.style.color='#555'">服務條款</a>
+      <span style="color:#333;">·</span>
+      <a href="https://tangerprivacy.netlify.app/" target="_blank" style="color:#555;text-decoration:none;" onmouseover="this.style.color='#888'" onmouseout="this.style.color='#555'">隱私權政策</a>
+    </div>
+    <div style="color:#444;font-size:11px;">TANGER BOT © 2026</div>
+  </div>
 </nav>
+<!-- topbar -->
+<div class="topbar">
+  <a href="https://tangerserverr.netlify.app/" target="_blank" class="topbar-btn site">🌐 官方網站</a>
+  <button class="topbar-btn invite" onclick="document.getElementById('invite-modal').classList.add('open')">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.033.054a19.996 19.996 0 0 0 6.003 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.201 13.201 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+    邀請機器人
+  </button>
+</div>
+<!-- invite modal -->
+<div id="invite-modal" onclick="if(event.target===this)closeInviteModal()">
+  <div style="background:linear-gradient(135deg,rgba(11,25,44,0.98),rgba(15,23,42,0.98));border:1px solid rgba(0,245,255,0.35);border-radius:24px;padding:2.5rem 2.2rem;max-width:440px;width:90%;text-align:center;box-shadow:0 0 60px rgba(0,245,255,0.15);position:relative;">
+    <button onclick="closeInviteModal()" style="position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:#64748B;font-size:1.4rem;cursor:pointer;">✕</button>
+    <div style="font-size:2.2rem;margin-bottom:0.8rem;">🤖</div>
+    <h3 style="color:#00F5FF;font-size:1.25rem;margin-bottom:0.5rem;">邀請機器人</h3>
+    <p style="color:#94A3B8;font-size:0.88rem;line-height:1.75;margin-bottom:1.4rem;">繼續邀請即表示你同意我們的服務條款與隱私權政策。</p>
+    <div style="display:flex;gap:0.8rem;justify-content:center;margin-bottom:1.2rem;flex-wrap:wrap;">
+      <a href="https://tanger-tos.netlify.app/" target="_blank" style="color:#38BDF8;font-size:0.82rem;text-decoration:underline;">📄 服務條款</a>
+      <span style="color:#334155;">｜</span>
+      <a href="https://tangerprivacy.netlify.app/" target="_blank" style="color:#38BDF8;font-size:0.82rem;text-decoration:underline;">🔒 隱私權政策</a>
+    </div>
+    <label style="display:flex;align-items:center;gap:0.6rem;justify-content:center;margin-bottom:1.5rem;cursor:pointer;">
+      <input type="checkbox" id="invite-agree" onchange="var b=document.getElementById('invite-btn');b.style.opacity=this.checked?'1':'0.4';b.style.pointerEvents=this.checked?'auto':'none';" style="width:16px;height:16px;accent-color:#00F5FF;cursor:pointer;">
+      <span style="color:#94A3B8;font-size:0.85rem;">我已閱讀並同意以上條款</span>
+    </label>
+    <a id="invite-btn" href="https://discord.com/oauth2/authorize?client_id=1509534278097305660&permissions=8&integration_type=0&scope=bot+applications.commands" target="_blank" style="display:block;background:#00F5FF;color:#0B192C;text-decoration:none;padding:0.85rem;border-radius:12px;font-weight:700;font-size:0.95rem;transition:all 0.3s;opacity:0.4;pointer-events:none;" onmouseover="this.style.background='#00c8d4'" onmouseout="this.style.background='#00F5FF'">確認並邀請 →</a>
+    <p style="color:#475569;font-size:0.75rem;margin-top:1rem;">點擊外側區域可關閉</p>
+  </div>
+</div>
 <div class="main">
   <div class="content">
     <div class="page-header">

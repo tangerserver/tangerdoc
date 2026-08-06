@@ -283,5 +283,15 @@ function resetInviteModal(){
   btn.style.pointerEvents = 'none';
 }
 </script>
+<script>
+function closeInviteModal(){
+  document.getElementById('invite-modal').classList.remove('open');
+  var cb=document.getElementById('invite-agree');
+  cb.checked=false;
+  var btn=document.getElementById('invite-btn');
+  btn.style.opacity='0.4';
+  btn.style.pointerEvents='none';
+}
+</script>
 </body>
 </html>
