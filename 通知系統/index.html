@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>通知系統 — TANGER BOT 文件</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#0f0f0f;--surface:#161616;--card:#1a1a1a;--card2:#202020;
+  --border:#252525;--border2:#2f2f2f;
+  --accent:#5865F2;--accent2:#7c84fa;--accent-dim:rgba(88,101,242,.12);
+  --green:#2ecc71;--red:#e74c3c;--yellow:#f1c40f;--orange:#e67e22;
+  --text:#eaeaea;--text2:#b0b0b0;--muted:#666;--sidebar:260px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;line-height:1.6;}
+a{color:inherit;text-decoration:none;}
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+
+/* ── sidebar ── */
+.sidebar{
+  position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;
+  background:var(--surface);border-right:1px solid var(--border);
+  overflow-y:auto;z-index:100;display:flex;flex-direction:column;
+}
+.sidebar-logo{padding:28px 22px 20px;border-bottom:1px solid var(--border);}
+.sidebar-logo .logo-row{display:flex;align-items:center;gap:10px;}
+.sidebar-logo .bot-avatar{width:38px;height:38px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.sidebar-logo .bot-name{font-size:15px;font-weight:700;color:var(--text);}
+.sidebar-logo .bot-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.sidebar-ver{display:inline-block;margin-top:10px;font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:var(--accent-dim);color:var(--accent2);}
+.sidebar-section{padding:20px 16px 6px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1.8px;text-transform:uppercase;}
+.sidebar-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 14px;margin:1px 8px;border-radius:8px;
+  font-size:13.5px;color:var(--text2);transition:all .15s;cursor:pointer;
+}
+.sidebar-item:hover{background:rgba(255,255,255,.05);color:var(--text);}
+.sidebar-item.active{background:var(--accent-dim);color:var(--accent2);font-weight:600;}
+.sidebar-item .si-icon{width:22px;text-align:center;font-size:15px;flex-shrink:0;}
+.sidebar-item .si-badge{margin-left:auto;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(241,196,15,.15);color:var(--yellow);}
+.sidebar-footer{margin-top:auto;padding:16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center;}
+
+/* ── main ── */
+.main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column;}
+.content{flex:1;padding:52px 72px 40px;max-width:860px;}
+
+/* ── page header ── */
+.page-header{margin-bottom:40px;}
+.breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-bottom:16px;}
+.breadcrumb span{color:var(--muted);}
+.breadcrumb a:hover{color:var(--accent2);}
+.page-title-row{display:flex;align-items:center;gap:16px;margin-bottom:12px;}
+.page-big-icon{font-size:40px;line-height:1;}
+.page-title-text h1{font-size:32px;font-weight:800;letter-spacing:-.5px;background:linear-gradient(120deg,var(--text) 60%,var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.page-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-top:4px;padding-left:56px;}
+.page-divider{height:1px;background:linear-gradient(90deg,var(--border2),transparent);margin:28px 0;}
+
+/* ── section ── */
+.section-title{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin:36px 0 12px;display:flex;align-items:center;gap:8px;}
+.section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+
+/* ── cmd block ── */
+.cmd-block{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;margin-bottom:12px;overflow:hidden;
+  transition:border-color .2s;
+}
+.cmd-block:hover{border-color:var(--border2);}
+.cmd-header{
+  display:flex;align-items:center;flex-wrap:wrap;gap:8px;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  background:var(--card2);
+}
+.cmd-name{
+  font-family:'Consolas','Courier New',monospace;
+  font-size:14.5px;font-weight:700;color:var(--accent2);
+}
+.cmd-summary{font-size:12px;color:var(--muted);margin-left:auto;}
+.cmd-body{padding:16px 20px;display:flex;flex-direction:column;gap:10px;}
+
+/* badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.3px;}
+.badge.slash{background:rgba(46,204,113,.1);color:var(--green);border:1px solid rgba(46,204,113,.2);}
+.badge.prefix{background:rgba(88,101,242,.12);color:var(--accent2);border:1px solid rgba(88,101,242,.2);}
+.badge.premium{background:rgba(241,196,15,.1);color:var(--yellow);border:1px solid rgba(241,196,15,.2);}
+
+/* params */
+.params-table{width:100%;border-collapse:collapse;font-size:13px;}
+.params-table th{text-align:left;padding:7px 12px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.8px;text-transform:uppercase;border-bottom:1px solid var(--border);}
+.params-table td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:top;}
+.params-table tr:last-child td{border-bottom:none;}
+.param-name{font-family:'Consolas','Courier New',monospace;color:var(--green);font-size:13px;}
+.param-type{font-size:11px;color:var(--muted);margin-top:2px;}
+.req-badge{display:inline-block;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;margin-left:4px;vertical-align:middle;}
+.req-badge.req{background:rgba(231,76,60,.15);color:var(--red);}
+.req-badge.opt{background:rgba(46,204,113,.1);color:var(--green);}
+
+/* example */
+.example-wrap{margin-top:4px;}
+.example-label{font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.example-box{
+  background:#0a0a0a;border:1px solid var(--border);border-radius:7px;
+  padding:10px 14px;font-family:'Consolas','Courier New',monospace;
+  font-size:13px;color:#9ba3ff;line-height:1.5;
+}
+
+/* note */
+.note{
+  display:flex;align-items:flex-start;gap:10px;
+  background:rgba(88,101,242,.06);border:1px solid rgba(88,101,242,.15);
+  border-radius:8px;padding:12px 14px;font-size:13px;color:var(--text2);
+}
+.note-icon{font-size:15px;flex-shrink:0;margin-top:1px;}
+.warn-note{
+  background:rgba(230,126,34,.06);border-color:rgba(230,126,34,.2);
+}
+
+/* ── pagination ── */
+.pagination{
+  display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  margin-top:56px;padding-top:28px;border-top:1px solid var(--border);
+}
+.pag-btn{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card);border:1px solid var(--border);
+  border-radius:10px;padding:16px 20px;transition:all .2s;
+  cursor:pointer;
+}
+.pag-btn:hover{background:var(--card2);border-color:var(--accent);transform:translateY(-1px);}
+.pag-btn.prev{justify-content:flex-start;}
+.pag-btn.next{justify-content:flex-end;text-align:right;}
+.pag-btn.disabled{opacity:.3;pointer-events:none;}
+.pag-arrow{font-size:18px;color:var(--muted);flex-shrink:0;}
+.pag-text .pag-dir{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;}
+.pag-text .pag-name{font-size:15px;font-weight:700;color:var(--text);}
+
+/* ── footer ── */
+.doc-footer{
+  padding:20px 72px 28px;
+  font-size:12px;color:var(--muted);
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;
+}
+.doc-footer .upd-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;}
+
+/* ── index cards ── */
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:4px;}
+.cat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:12px;padding:20px;transition:all .2s;display:block;
+}
+.cat-card:hover{border-color:var(--accent);transform:translateY(-2px);box-shadow:0 12px 32px rgba(88,101,242,.12);}
+.cat-card .cc-icon{font-size:26px;margin-bottom:12px;}
+.cat-card .cc-name{font-size:14px;font-weight:700;margin-bottom:5px;}
+.cat-card .cc-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+.cat-card .cc-meta{margin-top:12px;display:flex;align-items:center;justify-content:space-between;}
+.cat-card .cc-count{font-size:11px;color:var(--accent2);font-weight:600;}
+.cat-card .cc-arrow{font-size:14px;color:var(--muted);}
+</style>
+</head>
+<body>
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-row">
+      <div class="bot-avatar">🤖</div>
+      <div><div class="bot-name">TANGER BOT</div><div class="bot-sub">官方指令文件</div></div>
+    </div>
+    <span class="sidebar-ver">v1.0 文件</span>
+  </div>
+  <div class="sidebar-section">總覽</div>
+  <a href="../" class="sidebar-item"><span class="si-icon">🏠</span>首頁</a>
+  <div class="sidebar-section">指令系統</div>
+  <a href="../管理系統/" class="sidebar-item"><span class="si-icon">🛠️</span>管理系統</a><a href="../警告系統/" class="sidebar-item"><span class="si-icon">⚠️</span>警告系統</a><a href="../防護系統/" class="sidebar-item"><span class="si-icon">🛡️</span>防護系統</a><a href="../匿名系統/" class="sidebar-item"><span class="si-icon">🎭</span>匿名系統</a><a href="../趣味系統/" class="sidebar-item"><span class="si-icon">🎮</span>趣味系統</a><a href="../廣播系統/" class="sidebar-item"><span class="si-icon">📢</span>廣播系統<span class="si-badge">💎</span></a><a href="../音樂系統/" class="sidebar-item"><span class="si-icon">🎵</span>音樂系統</a><a href="../備份系統/" class="sidebar-item"><span class="si-icon">💾</span>備份系統<span class="si-badge">💎</span></a><a href="../通知系統/" class="sidebar-item active"><span class="si-icon">🔔</span>通知系統</a><a href="../人員系統/" class="sidebar-item"><span class="si-icon">👥</span>人員系統</a><a href="../人員計數器系統/" class="sidebar-item"><span class="si-icon">🔢</span>人員計數器系統</a><a href="../抽獎系統/" class="sidebar-item"><span class="si-icon">🎁</span>抽獎系統</a><a href="../其他指令/" class="sidebar-item"><span class="si-icon">📌</span>其他指令</a>
+  <div class="sidebar-footer">TANGER BOT © 2025</div>
+</nav>
+<div class="main">
+  <div class="content">
+    <div class="page-header">
+  <div class="breadcrumb"><a href="../">TANGER BOT</a><span>›</span><span>通知系統</span></div>
+  <div class="page-title-row">
+    <div class="page-big-icon">🔔</div>
+    <div class="page-title-text"><h1>通知系統</h1></div>
+  </div>
+  <div class="page-desc">設定自動推送台灣/全球地震、高溫警報、颱風警報通知到指定頻道。</div>
+  <div class="page-divider"></div>
+</div>
+    <div class="cmd-block"><div class="cmd-header"><span class="badge slash">/ 斜線</span><span class="cmd-name">/通知系統 台灣地震通知</span><span class="cmd-summary">設定台灣地震自動推送頻道（規模 3.0 以上）</span></div><div class="cmd-body"><table class="params-table"><thead><tr><th>參數</th><th>說明</th></tr></thead><tbody><tr><td><span class="param-name">頻道</span><span class="req-badge req">必填</span><div class="param-type">TextChannel</div></td><td>要接收地震通知的文字頻道</td></tr></tbody></table><div class="example-wrap"><div class="example-label">範例</div><div class="example-box">/通知系統 台灣地震通知 頻道:#地震通知</div></div><div class="note"><span class="note-icon">ℹ️</span><span>規模 3.0 以上的台灣地震會自動推送，包含震央、規模、深度資訊。</span></div></div></div><div class="cmd-block"><div class="cmd-header"><span class="badge slash">/ 斜線</span> <span class="badge premium">💎 進階</span><span class="cmd-name">/通知系統 全球地震通知</span><span class="cmd-summary">設定全球地震自動推送（規模可自訂，預設 M4.5+）</span></div><div class="cmd-body"><table class="params-table"><thead><tr><th>參數</th><th>說明</th></tr></thead><tbody><tr><td><span class="param-name">頻道</span><span class="req-badge req">必填</span><div class="param-type">TextChannel</div></td><td>要接收通知的文字頻道</td></tr><tr><td><span class="param-name">規模</span><span class="req-badge opt">選填</span><div class="param-type">float</div></td><td>最低通知規模，預設 4.5</td></tr></tbody></table><div class="example-wrap"><div class="example-label">範例</div><div class="example-box">/通知系統 全球地震通知 頻道:#全球地震 規模:5.0</div></div></div></div><div class="cmd-block"><div class="cmd-header"><span class="badge slash">/ 斜線</span><span class="cmd-name">/通知系統 台灣高溫警報</span><span class="cmd-summary">設定台灣高溫警報自動推送頻道</span></div><div class="cmd-body"><table class="params-table"><thead><tr><th>參數</th><th>說明</th></tr></thead><tbody><tr><td><span class="param-name">頻道</span><span class="req-badge req">必填</span><div class="param-type">TextChannel</div></td><td>要接收高溫警報的文字頻道</td></tr></tbody></table><div class="example-wrap"><div class="example-label">範例</div><div class="example-box">/通知系統 台灣高溫警報 頻道:#天氣通知</div></div></div></div><div class="cmd-block"><div class="cmd-header"><span class="badge slash">/ 斜線</span><span class="cmd-name">/通知系統 台灣颱風警報</span><span class="cmd-summary">設定台灣颱風警報自動推送頻道</span></div><div class="cmd-body"><table class="params-table"><thead><tr><th>參數</th><th>說明</th></tr></thead><tbody><tr><td><span class="param-name">頻道</span><span class="req-badge req">必填</span><div class="param-type">TextChannel</div></td><td>要接收颱風警報的文字頻道</td></tr></tbody></table><div class="example-wrap"><div class="example-label">範例</div><div class="example-box">/通知系統 台灣颱風警報 頻道:#天氣通知</div></div></div></div>
+    <div class="pagination"><a href="../備份系統/" class="pag-btn prev"><span class="pag-arrow">←</span><div class="pag-text"><div class="pag-dir">Previous</div><div class="pag-name">備份系統</div></div></a><a href="../人員系統/" class="pag-btn next"><div class="pag-text"><div class="pag-dir">Next</div><div class="pag-name">人員系統</div></div><span class="pag-arrow">→</span></a></div>
+  </div>
+  <div class="doc-footer"><span class="upd-dot"></span>最後更新：2026 年 08 月 06 日</div>
+</div>
+</body>
+</html>
