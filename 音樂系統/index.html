@@ -19,7 +19,6 @@ a{color:inherit;text-decoration:none;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
 
-/* ── sidebar ── */
 .sidebar{
   position:fixed;top:0;left:0;width:var(--sidebar);height:100vh;
   background:var(--surface);border-right:1px solid var(--border);
@@ -43,11 +42,9 @@ a{color:inherit;text-decoration:none;}
 .sidebar-item .si-badge{margin-left:auto;font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:rgba(241,196,15,.15);color:var(--yellow);}
 .sidebar-footer{margin-top:auto;padding:16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);text-align:center;}
 
-/* ── main ── */
 .main{margin-left:var(--sidebar);min-height:100vh;display:flex;flex-direction:column;}
 .content{flex:1;padding:72px 72px 40px;max-width:860px;}
 
-/* ── page header ── */
 .page-header{margin-bottom:40px;}
 .breadcrumb{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-bottom:16px;}
 .breadcrumb span{color:var(--muted);}
@@ -58,11 +55,9 @@ a{color:inherit;text-decoration:none;}
 .page-desc{font-size:14px;color:var(--text2);line-height:1.7;margin-top:4px;padding-left:56px;}
 .page-divider{height:1px;background:linear-gradient(90deg,var(--border2),transparent);margin:28px 0;}
 
-/* ── section ── */
 .section-title{font-size:13px;font-weight:700;color:var(--muted);letter-spacing:1.2px;text-transform:uppercase;margin:36px 0 12px;display:flex;align-items:center;gap:8px;}
 .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
 
-/* ── cmd block ── */
 .cmd-block{
   background:var(--card);border:1px solid var(--border);
   border-radius:12px;margin-bottom:12px;overflow:hidden;
@@ -118,7 +113,6 @@ a{color:inherit;text-decoration:none;}
   background:rgba(230,126,34,.06);border-color:rgba(230,126,34,.2);
 }
 
-/* ── pagination ── */
 .pagination{
   display:grid;grid-template-columns:1fr 1fr;gap:12px;
   margin-top:56px;padding-top:28px;border-top:1px solid var(--border);
@@ -137,7 +131,6 @@ a{color:inherit;text-decoration:none;}
 .pag-text .pag-dir{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;margin-bottom:2px;}
 .pag-text .pag-name{font-size:15px;font-weight:700;color:var(--text);}
 
-/* ── footer ── */
 .doc-footer{
   padding:20px 72px 28px;
   font-size:12px;color:var(--muted);
@@ -146,7 +139,6 @@ a{color:inherit;text-decoration:none;}
 }
 .doc-footer .upd-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;}
 
-/* ── index cards ── */
 .cat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:4px;}
 .cat-card{
   background:var(--card);border:1px solid var(--border);
@@ -160,7 +152,6 @@ a{color:inherit;text-decoration:none;}
 .cat-card .cc-count{font-size:11px;color:var(--accent2);font-weight:600;}
 .cat-card .cc-arrow{font-size:14px;color:var(--muted);}
 
-/* ── topbar ── */
 .topbar{position:fixed;top:0;left:var(--sidebar);right:0;height:52px;background:rgba(15,15,15,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:flex-end;padding:0 28px;gap:10px;z-index:99;}
 .topbar-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;font-size:12.5px;font-weight:600;text-decoration:none;transition:all .15s;cursor:pointer;border:none;font-family:inherit;}
 .topbar-btn.invite{background:#5865F2;color:#fff;}
